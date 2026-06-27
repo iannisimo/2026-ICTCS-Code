@@ -16,6 +16,7 @@ psi = psi(:, 1);
 t = cell(1, n+1);
 s = cell(1, 1);
 
+% generate the d-ary tree from psi
 for i = 1:n
   t{i} = cell(1, d^(n-i));
   if (i == 1)
@@ -62,8 +63,8 @@ for i = 1:n
   end
 end
 
+% generate circuit from QdKP-Tree
 cir = qclab.QCircuit(n, 0, d);
-
 
 for i = n:-1:1
   for j = 1:numel(t{i})
@@ -91,6 +92,9 @@ for i = n:-1:1
         leaf_r = leaf_l + 1;
         sub_l = leaf_l * 2^(k-1);
         sub_r = leaf_r * 2^(k-1);
+        % SubspaceGate embeds the qubit gate in a d x d unitary
+        % and places the original operator on the subspace defined
+        % as the second parameter
         ry = qclab.qgates.qudit.SubspaceGate(ry, [sub_l, sub_r], target);
         if i < n
           ry = qclab.qgates.MControlledGate(ry, ctrl, target, ctrlStates);
