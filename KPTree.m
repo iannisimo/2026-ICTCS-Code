@@ -2,7 +2,7 @@ addpath('qclab')
 addpath('util')
 
 % parameters
-n = 4;
+n = 5;
 
 
 % generate random normalized psi
@@ -35,7 +35,7 @@ for i = 1:n
   end
 end
 
-t{n+1} = psi(1) / norm(psi(1));
+t{n+1} = sqrt(sum(power(psi, 2))) / norm(psi);
 
 cir = qclab.QCircuit(n, 0, 2);
 
@@ -68,4 +68,5 @@ end
 
 % test whether the state of the circuit corresponds
 % to the original psi
-norm(cir.simulate(repmat('0', 1, n)).states - psi)
+normdiff = norm(cir.simulate(repmat('0', 1, n)).states - psi);
+fprintf('Norm of the difference between psi and the simulated state: %.2f\n', normdiff);
